@@ -1,116 +1,168 @@
-# FFC-Dataset-10k
+# Frontal Face Composition Dataset (FFC-10k-Dataset) - Construction Guide
 
-Reproducibility resources for the paper:
+This repository contains the scripts and methodology required for the curation and construction of the **Frontal Face Composition Dataset (FFC-10k-Dataset)**.
 
-**A Comparative Evaluation of Pretrained Face Embedding Models for Face Verification**
+The FFC-10k-Dataset is a curated face dataset composed primarily of images featuring faces in a frontal position. It was constructed by selecting and reorganizing identities and images from multiple publicly available face datasets according to predefined curation rules.
 
-## Overview
+---
 
-FFC-Dataset-10k is a face image dataset constructed for the evaluation of pretrained face embedding models in face verification.
+## 1. Prerequisites
 
-The dataset contains **10,000 images from 5,000 identities**, with two images associated with each identity. The images were selected from seven publicly available face datasets.
+To execute the dataset construction process, you will need the following resources:
 
-The dataset was used to evaluate multiple pretrained face embedding models under a standardized face verification protocol.
+* **Python 3.x** and **Jupyter Notebook** as the execution environment.
+* **Image processing libraries**, such as `opencv-python`, `scikit-image`, and other dependencies required by the notebook. It is recommended to install them using the provided `requirements.txt` file, if available.
+* **Mapping files (.csv)** containing the selection and renaming information used during the curation process.
+* **Construction notebook:** `create_ffc10k_dataset.ipynb`.
 
-## Source Datasets
+---
 
-The FFC-Dataset-10k was constructed using images from the following datasets:
+## 2. Construction Methodology
 
-* Selfies-and-Videos
-* Selfies-and-ID
-* Pins-Face
-* FEI-Face
-* FaceScrub
-* MORPH-2
-* BUPT-CBFace-12
+The construction of the FFC-10k-Dataset follows a sequential three-phase methodology designed to ensure consistent data curation, organization, and traceability.
 
-The file [`selected_images.csv`](https://github.com/CEIA-NoLeakIV/FFC-Dataset-10k/blob/main/selected_images.csv) provides the list of images selected to construct the FFC-Dataset-10k, together with their corresponding source datasets. This file is provided to facilitate the reproducibility of the dataset construction process.
+### Phase 1: Preparation and Organization of Source Data
 
-## Dataset Organization
+This phase consists of obtaining the source datasets and organizing them using the directory structure expected by the construction notebook.
 
-Each identity is represented by a separate folder containing two face images.
+#### A. Download and Decompression of Original Datasets
 
-The dataset follows the structure:
+Obtain and extract the image files from the following original face datasets.
+
+Create a dedicated working directory, such as `original_datasets`, to store the extracted datasets.
+
+| Dataset            | Access Link                                                                                                            |
+| :----------------- | :--------------------------------------------------------------------------------------------------------------------- |
+| Selfies-and-Videos | [Kaggle](https://www.kaggle.com/datasets/tapakah68/selfies-and-video-dataset-4-000-people?select=selfie_and_video.csv) |
+| Selfies-and-ID     | [Kaggle](https://www.kaggle.com/datasets/tapakah68/selfies-id-images-dataset)                                          |
+| Pins-Face          | [Kaggle](https://www.kaggle.com/datasets/hereisburak/pins-face-recognition/data)                                       |
+| FEI-Face           | [Kaggle](https://www.kaggle.com/datasets/whizzkid/fei-face-data)                                                       |
+| Facescrub          | [Kaggle](https://www.kaggle.com/datasets/rajnishe/facescrub-full)                                                      |
+| MORPH-2            | [Kaggle](https://www.kaggle.com/datasets/chiragsaipanuganti/morph/data)                                                |
+| BUPT-CBFace-12     | [Official Dataset Page](https://buptzyb.github.io/CBFace/?reload=true#download)                                        |
+
+> **Note:** The original datasets are not redistributed in this repository. Users are responsible for obtaining the source datasets and complying with their respective licenses and terms of use.
+
+#### B. Directory Standardization
+
+**Rename the extracted directories exactly** as shown below. The construction notebook expects these directory names when locating the source datasets.
 
 ```text
-FFC-Dataset-10k/
-├── CBFACE_0/
-│   ├── image_1
-│   └── image_2
-├── CBFACE_1/
-│   ├── image_1
-│   └── image_2
-├── ...
-├── FACESCRUB_0/
-│   ├── image_1
-│   └── image_2
+original_datasets/
+├── Selfies-and-Videos-Dataset/
+├── Selfies-and-ID-Images-Dataset/
+├── Pins-Face-Recognition-Dataset/
+├── FEI-Face-Dataset/
+├── Facescrub-Dataset/
+├── MORPH-2-Dataset/
+└── BUPT-CBFace-12/
+```
+
+---
+
+### Phase 2: Obtaining Curation Resources
+
+Ensure that the following files are available in your working environment before executing the construction process.
+
+1. **Mapping Files**
+
+   Download or obtain the **CSV mapping files** containing the selection and renaming information used by the construction notebook.
+
+   These files contain the reference columns required for the curation process, including fields such as:
+
+   * `original_class_name`
+   * `new_class_name`
+   * and other reference columns required by the notebook.
+
+2. **Construction Notebook**
+
+   Obtain the construction notebook:
+
+   ```text
+   create_ffc10k_dataset.ipynb
+   ```
+
+---
+
+### Phase 3: Execution of the Composition Process
+
+Once the original datasets and curation resources are properly organized, execute the construction notebook.
+
+#### 1. Execute the Notebook
+
+Open:
+
+```text
+create_ffc10k_dataset.ipynb
+```
+
+using Jupyter Notebook or another compatible Jupyter environment.
+
+#### 2. Configure the Paths
+
+In the initial configuration cell, provide the appropriate paths for:
+
+* the root directory containing the **original datasets**;
+* the directory containing the **CSV mapping files**;
+* the **destination directory** where the resulting FFC-10k-Dataset will be generated.
+
+For example:
+
+```text
+original_datasets/
+mapping_files/
+ffc_output/
+```
+
+The exact paths depend on the user's local environment.
+
+#### 3. Run the Construction Process
+
+Execute all cells in the notebook.
+
+The construction pipeline will use the provided mapping files and source datasets to:
+
+1. locate the selected source identities and images;
+2. apply the defined curation and selection criteria;
+3. reorganize the selected identities;
+4. rename classes and images according to the mapping files; and
+5. generate the final **FFC-10k-Dataset** in the specified output directory.
+
+After successful execution, the resulting dataset will be organized into its corresponding identity classes.
+
+---
+
+## 3. Output Structure
+
+The resulting dataset is expected to follow an identity-based directory structure similar to:
+
+```text
+ffc_output/
+├── class_0001/
+│   ├── image_0001.jpg
+│   ├── image_0002.jpg
+│   └── ...
+├── class_0002/
+│   ├── image_0001.jpg
+│   ├── image_0002.jpg
+│   └── ...
 └── ...
 ```
 
-The naming convention identifies the source dataset and the corresponding identity.
+The exact class and image naming conventions are determined by the mapping files and the construction notebook.
 
-## Evaluation Pipeline
+---
 
-The accompanying notebook [`ArcFace-embeddings-v4.ipynb`](https://github.com/CEIA-NoLeakIV/FFC-Dataset-10k/blob/main/ArcFace-embeddings-v4.ipynb) provides an example of the evaluation pipeline used with the ArcFace model.
+## 4. Reproducibility
 
-The general evaluation procedure consists of:
+To reproduce the construction of the FFC-10k-Dataset:
 
-1. Resizing images while preserving their aspect ratio, with a maximum dimension of 640 pixels.
-2. Face detection and alignment.
-3. Face embedding extraction.
-4. L2 normalization of the embeddings.
-5. Face verification using cosine distance.
-6. Evaluation using ROC-AUC, Equal Error Rate (EER), Precision, Recall, and F1-score.
+1. Obtain the original datasets listed in **Phase 1**.
+2. Extract and rename the datasets according to the required directory structure.
+3. Obtain the mapping files used by the curation process.
+4. Download `create_ffc10k_dataset.ipynb`.
+5. Configure the paths in the notebook.
+6. Execute all notebook cells.
+7. Verify the generated output directory.
 
-The complete study evaluated eleven pretrained face embedding models through the DeepFace framework.
-
-## Experimental Evaluation
-
-The experiments were conducted using:
-
-* **5 folds**
-* **1,000 images**
-* **2,500 images**
-* **5,000 images**
-* **10,000 images**
-
-The evaluated models were:
-
-* VGG-Face
-* FaceNet
-* FaceNet512
-* OpenFace
-* DeepFace
-* DeepID
-* ArcFace
-* Dlib
-* SFace
-* GhostFaceNet
-* Buffalo_L
-
-## Reproducibility
-
-This repository provides the dataset selection information and an example evaluation notebook to facilitate reproduction and further experimentation.
-
-The [`selected_images.csv`](https://github.com/CEIA-NoLeakIV/FFC-Dataset-10k/blob/main/selected_images.csv) file identifies the images used to construct the FFC-Dataset-10k from the source datasets.
-
-The [`ArcFace-embeddings-v4.ipynb`](https://github.com/CEIA-NoLeakIV/FFC-Dataset-10k/blob/main/ArcFace-embeddings-v4.ipynb) notebook demonstrates the embedding extraction and evaluation procedure for ArcFace. The same general experimental protocol was applied to the other models evaluated in the study.
-
-## Dataset Availability
-
-The images in FFC-Dataset-10k originate from publicly available datasets. Users should consult the terms and licenses of the respective source datasets before redistributing or reusing the images.
-
-This repository provides the selection information and evaluation resources rather than redistributing the complete collection of source images.
-
-## Citation
-
-If you use the FFC-Dataset-10k or the evaluation resources provided in this repository, please cite:
-
-**A Comparative Evaluation of Pretrained Face Embedding Models for Face Verification**
-
-## Repository
-
-This repository contains the reproducibility resources associated with the study:
-
-* [`selected_images.csv`](https://github.com/CEIA-NoLeakIV/FFC-Dataset-10k/blob/main/selected_images.csv) — list of selected images and their source datasets.
-* [`ArcFace-embeddings-v4.ipynb`](https://github.com/CEIA-NoLeakIV/FFC-Dataset-10k/blob/main/ArcFace-embeddings-v4.ipynb) — example ArcFace embedding extraction and evaluation notebook.
+This procedure allows the dataset construction process to be reproduced from the original source datasets and the provided curation resources.
